@@ -2,6 +2,7 @@
 
 #################################################
 # Steps to create suitable environment on the HPC
+# Includes GPU support
 #################################################
 
 # Load the miniconda module

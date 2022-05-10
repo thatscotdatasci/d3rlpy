@@ -1,0 +1,13 @@
+# source this file to activate the d3rlpy environment
+
+#! Optionally modify the environment seen by the application
+#! (note that SLURM reproduces the environment at submission irrespective of ~/.bashrc):
+. /etc/profile.d/modules.sh                # Leave this line (enables the module command)
+module purge                               # Removes all modules still loaded
+module load rhel8/default-amp              # REQUIRED - loads the basic environment
+
+#! Insert additional module load commands after this line if needed:
+
+# run these steps to create environment
+conda deactivate
+source .venv/bin/activate
