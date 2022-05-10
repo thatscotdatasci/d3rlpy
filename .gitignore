@@ -20,4 +20,11 @@ build
 dist
 /.idea/
 *.egg-info
+
+# Virtual env
 .venv
+
+# HPC
+slurm_logs/
+slurm-*
+machine.file.*
