@@ -1,16 +1,15 @@
 #!/bin/bash
 #SBATCH -J d3rlpy
-#SBATCH -A KRUEGER-SL2-GPU
+#SBATCH -A KRUEGER-SL2-CPU
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --gres=gpu:1
-##SBATCH --exclusive
+#SBATCH --array=1-3
 #SBATCH --time=01:00:00
 #SBATCH --mail-type=FAIL
 #! Uncomment this to prevent the job from being requeued (e.g. if
 #! interrupted by node failure or system downtime):
 ##SBATCH --no-requeue
-#SBATCH -p ampere
+#SBATCH -p icelake
 
 #! Number of nodes and tasks per node allocated by SLURM (do not change):
 numnodes=$SLURM_JOB_NUM_NODES
@@ -24,7 +23,7 @@ mpi_tasks_per_node=$(echo "$SLURM_TASKS_PER_NODE" | sed -e  's/^\([0-9][0-9]*\).
 #! (note that SLURM reproduces the environment at submission irrespective of ~/.bashrc):
 . /etc/profile.d/modules.sh                # Leave this line (enables the module command)
 module purge                               # Removes all modules still loaded
-module load rhel8/default-amp              # REQUIRED - loads the basic environment
+module load rhel8/default-icl              # REQUIRED - loads the basic environment
 
 #! Insert additional module load commands after this line if needed:
 source /home/ajc348/rds/hpc-work/d3rlpy/hpc/README.d3rlpy.activate
@@ -40,7 +39,7 @@ workdir="$SLURM_SUBMIT_DIR"  # The value of SLURM_SUBMIT_DIR sets workdir to the
                              # in which sbatch is run.
 
 #! Are you using OpenMP (NB this is unrelated to OpenMPI)? If so increase this
-#! safe value to no more than 128:
+#! safe value to no more than 76:
 export OMP_NUM_THREADS=1
 
 #! Number of MPI tasks to be started by the application per node and in total (do not change):
@@ -50,7 +49,7 @@ np=$[${numnodes}*${mpi_tasks_per_node}]
 #! (OMP_NUM_THREADS threads will be created):
 CMD="$application $options"
 
-#! Choose this for a MPI code using OpenMPI:
+#! Choose this for a MPI code (possibly using OpenMP) using OpenMPI:
 #CMD="mpirun -npernode $mpi_tasks_per_node -np $np $application $options"
 
 ###############################################################

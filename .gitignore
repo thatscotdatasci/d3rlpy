@@ -28,3 +28,7 @@ dist
 slurm_logs/
 slurm-*
 machine.file.*
+
+# Models and Datasets
+models/
+datasets/
