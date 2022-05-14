@@ -95,6 +95,7 @@ dynamics.fit(
     dataset.episodes,
     eval_episodes=test_episodes,
     n_steps=100000,
+    n_steps_per_epoch=10000,
     scorers={
         "obs_error": dynamics_observation_prediction_error_scorer,
         "rew_error": dynamics_reward_prediction_error_scorer,
