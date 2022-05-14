@@ -7,32 +7,39 @@ import torch
 import numpy as np
 import d3rlpy
 from d3rlpy.algos import SAC
-from d3rlpy.metrics.scorer import td_error_scorer
-from d3rlpy.metrics.scorer import average_value_estimation_scorer
-from d3rlpy.metrics.scorer import evaluate_on_environment
 
 from dogo.paths import MODELS_BASEDIR
-
-print(f"GPU available: {torch.cuda.is_available()}")
+from dogo.utils.datetime import get_current_timestamp_str
 
 ##########
 # Settings
 ##########
 
-ENV = "HalfCheetah-v2"
-USE_GPU = torch.cuda.is_available()
 SEED = None 
+USE_GPU = torch.cuda.is_available()
 
-#####################################
-# Create Directory to Save Results In
-#####################################
+ENV = "HalfCheetah-v2"
 
-model_dir_gen = lambda: os.path.join(MODELS_BASEDIR, 'sac', ENV, datetime.now().strftime("%Y.%m.%Y-%H:%M:%S"))
-model_dir = model_dir_gen()
-while os.path.isdir(model_dir):
+###############
+# Derived Paths
+###############
+
+# Path that the results will be saved to
+sac_policy_dir_gen = lambda ts: os.path.join(MODELS_BASEDIR, 'sac', ENV, ts)
+cur_timestamp = get_current_timestamp_str()
+sac_policy_dir = sac_policy_dir_gen(cur_timestamp)
+
+# Create results directory
+while os.path.isdir(sac_policy_dir):
     time.sleep(np.random.rand())
-    model_dir = model_dir_gen()
-os.mkdir(model_dir)
+    cur_timestamp = get_current_timestamp_str()
+    sac_policy_dir = sac_policy_dir_gen(cur_timestamp)
+os.mkdir(sac_policy_dir)
+
+sac_policy_model_path = os.path.join(
+    sac_policy_dir,
+    f"model_{cur_timestamp}.pt"
+)
 
 ######################
 # Load the Environment
@@ -78,10 +85,11 @@ sac.fit_online(
     n_steps_per_epoch=1000,
     update_interval=1,
     update_start_step=1000,
-    logdir=model_dir,
+    experiment_name=f"SAC_{SEED}",
+    logdir=sac_policy_dir,
 )
 
 ################
 # Save the Model
 ################
-sac.save_model(os.path.join(model_dir, 'model.pt'))
+sac.save_model(sac_policy_model_path)

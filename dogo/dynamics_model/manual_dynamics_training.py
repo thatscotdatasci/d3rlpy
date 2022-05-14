@@ -5,7 +5,7 @@ import torch
 from torch import Tensor
 from d3rlpy.dataset import MDPDataset
 
-from dogo.dynamics_model.dynamics_model import Gauss_Dynamics_Model, Trainer
+from dogo.dynamics_model.manual_dynamics_model import Gauss_Dynamics_Model, Trainer
 from dogo.paths import MODELS_BASEDIR, DATASET_BASEDIR, DYNAMICS_MODEL_DIR
 from dogo.utils.datetime import get_current_timestamp_str
 from dogo.utils.pytorch_setup import DEVICE

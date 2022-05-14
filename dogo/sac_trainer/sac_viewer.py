@@ -10,12 +10,24 @@ from dogo.paths import MODELS_BASEDIR
 # Settings
 ##########
 
-ENV = "HalfCheetah-v2"
-MODEL_TIMESTAMP_DIR = "2022.05.2022-18:13:40"
-# MODEL_TIMESTAMP_DIR = "2022.05.2022-18:13:41"
-# MODEL_TIMESTAMP_DIR = "2022.05.2022-18:13:42"
-MODEL_FILENAME = "model.pt"
+SEED = None 
 
+ENV = "HalfCheetah-v2"
+SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
+# SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:41"
+# SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:42"
+
+###############
+# Derived Paths
+###############
+
+sac_policy_model_path = os.path.join(
+    MODELS_BASEDIR,
+    'sac',
+    ENV,
+    SAC_POLICY_TIMESTAMP,
+    f"model_{SAC_POLICY_TIMESTAMP}.pt"
+)
 
 ###########
 # Execution
@@ -24,12 +36,15 @@ MODEL_FILENAME = "model.pt"
 # Load environment
 env = gym.make(ENV)
 
+if SEED:
+    env.seed(SEED)
+
 # Load algorithm
 sac = SAC()
 sac.build_with_env(env)
 
 # Load model
-sac.load_model(os.path.join(MODELS_BASEDIR, 'sac', ENV, MODEL_TIMESTAMP_DIR, MODEL_FILENAME))
+sac.load_model(sac_policy_model_path)
 
 # Loop through however many episodes
 for i_episode in range(1):
@@ -41,7 +56,9 @@ for i_episode in range(1):
 
         print(observation)
         
-        action = sac.sample_action(observation)
+        # The sample_action methods requires a batch dimension
+        # In this case we are only passing in a single observation
+        action = sac.sample_action(observation[None,:])
         observation, reward, done, info = env.step(action)
         if done:
             print("Episode finished after {} timesteps".format(t+1))
