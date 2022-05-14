@@ -41,7 +41,7 @@ for i_episode in range(1):
 
         print(observation)
         
-        action = env.action_space.sample()
+        action = sac.sample_action(observation)
         observation, reward, done, info = env.step(action)
         if done:
             print("Episode finished after {} timesteps".format(t+1))
