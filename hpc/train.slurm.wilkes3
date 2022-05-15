@@ -33,7 +33,7 @@ source /home/ajc348/rds/hpc-work/d3rlpy/hpc/README.d3rlpy.activate
 application="python"
 
 #! Run options for the application:
-options="dogo/sac_trainer/sac_trainer.py"
+options="dogo/dynamics_model/d3rlpy_dynamics_trainer.py"
 
 #! Work directory (i.e. where the job will run):
 workdir="$SLURM_SUBMIT_DIR"  # The value of SLURM_SUBMIT_DIR sets workdir to the directory
