@@ -1,7 +1,6 @@
 import os
 import argparse
 
-import gym
 import torch
 import d3rlpy
 from d3rlpy.datasets import MDPDataset
@@ -24,8 +23,8 @@ USE_GPU = torch.cuda.is_available()
 
 ENV = "HalfCheetah-v2"
 POLICY_ALGORITHM = "sac"
-POLICY_TIMESTAMP = "2022.05.2022-18:13:40"
-DATASET_TIMESTAMP = "2022.05.2022-11:17:04"
+POLICY_TIMESTAMP = "2022.05.10-18:13:40"
+DATASET_TIMESTAMP = "2022.05.11-11:17:04"
 
 ###############
 # Derived Paths
@@ -66,13 +65,9 @@ else:
 # Load dataset
 dataset = MDPDataset.load(dataset_path)
 
-# Load environment
-env = gym.make(ENV)
-
 # fix seed
 if SEED:
     d3rlpy.seed(SEED)
-    env.seed(SEED)
 
 _, test_episodes = train_test_split(dataset, test_size=0.2)
 
