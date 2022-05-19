@@ -23,7 +23,7 @@ SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
 
 sac_policy_model_path = os.path.join(
     MODELS_BASEDIR,
-    'sac',
+    "sac",
     ENV,
     SAC_POLICY_TIMESTAMP,
     f"model_{SAC_POLICY_TIMESTAMP}.pt"
@@ -35,6 +35,7 @@ sac_policy_model_path = os.path.join(
 
 # Load environment
 env = gym.make(ENV)
+# env = gym.wrappers.Monitor(env, "./vid", video_callable=lambda episode_id: True, force=True)
 
 if SEED:
     env.seed(SEED)
