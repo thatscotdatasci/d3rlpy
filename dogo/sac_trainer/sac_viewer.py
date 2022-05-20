@@ -13,9 +13,18 @@ from dogo.paths import MODELS_BASEDIR
 SEED = None 
 
 ENV = "HalfCheetah-v2"
+
 SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
+SAC_POLICY_d3rlpy_DIR = "SAC_online_20220510181343"
+SAC_POLICY_CHECKPOINT = "100000"
+
 # SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:41"
+# SAC_POLICY_d3rlpy_DIR = "SAC_online_20220510181345"
+# SAC_POLICY_CHECKPOINT = "80000"
+
 # SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:42"
+# SAC_POLICY_d3rlpy_DIR = "SAC_online_20220510181344"
+# SAC_POLICY_CHECKPOINT = "80000"
 
 ###############
 # Derived Paths
@@ -26,7 +35,8 @@ sac_policy_model_path = os.path.join(
     "sac",
     ENV,
     SAC_POLICY_TIMESTAMP,
-    f"model_{SAC_POLICY_TIMESTAMP}.pt"
+    SAC_POLICY_d3rlpy_DIR,
+    f"model_{SAC_POLICY_CHECKPOINT}.pt"
 )
 
 ###########
