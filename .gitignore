@@ -21,6 +21,9 @@ dist
 /.idea/
 *.egg-info
 
+# VSCode
+.vscode
+
 # Virtual env
 .venv
 
