@@ -1,3 +1,4 @@
+from calendar import EPOCH
 import os
 import time
 from datetime import datetime
@@ -19,6 +20,9 @@ SEED = None
 USE_GPU = torch.cuda.is_available()
 
 ENV = "HalfCheetah-v2"
+
+EPOCH_LENGTH = 25000
+N_EPOCHS = 120
 
 ###############
 # Derived Paths
@@ -62,6 +66,8 @@ if SEED:
 ###########################
 
 sac = SAC(
+    gamma=0.99,
+    tau=0.005,
     batch_size=256,
     actor_learning_rate=3e-4,
     critic_learning_rate=3e-4,
@@ -72,7 +78,7 @@ sac = SAC(
 ##########################
 # Define the replay buffer
 ##########################
-buffer = d3rlpy.online.buffers.ReplayBuffer(maxlen=100000, env=env)
+buffer = d3rlpy.online.buffers.ReplayBuffer(maxlen=EPOCH_LENGTH*N_EPOCHS, env=env)
 
 #######
 # Train
@@ -81,10 +87,10 @@ sac.fit_online(
     env,
     buffer,
     eval_env=eval_env,
-    n_steps=100000,
-    n_steps_per_epoch=1000,
+    n_steps=EPOCH_LENGTH*N_EPOCHS,
+    n_steps_per_epoch=EPOCH_LENGTH,
     update_interval=1,
-    update_start_step=1000,
+    update_start_step=10000,
     experiment_name=f"SAC_{SEED}",
     logdir=sac_policy_dir,
 )
