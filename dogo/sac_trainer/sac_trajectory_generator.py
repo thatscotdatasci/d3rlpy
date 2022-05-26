@@ -44,7 +44,7 @@ dataset_dir = os.path.join(
     'sac',
     ENV,
     f"sac_{SAC_POLICY_TIMESTAMP}",
-    'D3RLPY-PEP2'
+    'D3RLPY-PEP4'
 )
 dataset_path = os.path.join(dataset_dir, f"data_{cur_timestamp}.h5")
 
@@ -88,7 +88,18 @@ for e in range(N_EPISODES):
     next_observations = dataset.observations[1:EPISODE_LENGTH+1,:]
     rewards = dataset.rewards[:EPISODE_LENGTH][:,None]
     terminals = dataset.terminals[:EPISODE_LENGTH][:,None]
-    policies = np.vstack((np.zeros((int(EPISODE_LENGTH/2),1)), np.ones((int(EPISODE_LENGTH/2),1))))
+    
+    # Split into two
+    # policies = np.vstack((np.zeros((int(EPISODE_LENGTH/2),1)), np.ones((int(EPISODE_LENGTH/2),1))))
+
+    # Split into five
+    policies = np.vstack((
+        np.full((int(EPISODE_LENGTH/5),1), 0.),
+        np.full((int(EPISODE_LENGTH/5),1), 1.),
+        np.full((int(EPISODE_LENGTH/5),1), 2.),
+        np.full((int(EPISODE_LENGTH/5),1), 3.),
+        np.full((int(EPISODE_LENGTH/5),1), 4.),
+        ))
 
     # create and save a numpy array
     dataset_arr = np.hstack((observations, actions, next_observations, rewards, terminals, policies))
