@@ -23,8 +23,10 @@ SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
 # SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:41"
 # SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:42"
 
-N_EPISODES = 101
+N_EPISODES = 500
 EPISODE_LENGTH = 1000
+N_POLICIES = 5
+SAVE_POLICY = 3.
 
 ###############
 # Derived Paths
@@ -44,7 +46,7 @@ dataset_dir = os.path.join(
     'sac',
     ENV,
     f"sac_{SAC_POLICY_TIMESTAMP}",
-    'D3RLPY-PEP4'
+    'D3RLPY-PAP5-P3_100000'
 )
 dataset_path = os.path.join(dataset_dir, f"data_{cur_timestamp}.h5")
 
@@ -103,7 +105,14 @@ for e in range(N_EPISODES):
 
     # create and save a numpy array
     dataset_arr = np.hstack((observations, actions, next_observations, rewards, terminals, policies))
-    assert dataset_arr.shape[0] == EPISODE_LENGTH
+
+    # optionally select only a single policy
+    if SAVE_POLICY is not None:
+        dataset_arr = dataset_arr[np.squeeze(np.argwhere(dataset_arr[:,-1]==SAVE_POLICY)),:]
+        assert dataset_arr.shape[0] == int(EPISODE_LENGTH/N_POLICIES)
+    else:
+        assert dataset_arr.shape[0] == EPISODE_LENGTH
+    
     np.save(os.path.join(dataset_dir, f'rollout_{EPISODE_LENGTH}_{e}.npy'), dataset_arr)
 
     # create or update the final dataset and array
@@ -115,7 +124,10 @@ for e in range(N_EPISODES):
         final_dataset_arr = np.vstack((final_dataset_arr, dataset_arr))
 
 # check the datasets
-assert final_dataset_arr.shape[0] == N_EPISODES*EPISODE_LENGTH
+if SAVE_POLICY is not None:
+    assert final_dataset_arr.shape[0] == N_EPISODES*int(EPISODE_LENGTH/N_POLICIES)
+else:
+    assert final_dataset_arr.shape[0] == N_EPISODES*EPISODE_LENGTH
 
 # save MDPDataset
 dataset.dump(dataset_path)
