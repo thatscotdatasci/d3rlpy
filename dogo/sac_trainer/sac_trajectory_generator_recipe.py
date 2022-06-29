@@ -27,10 +27,11 @@ SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
 
 RecipeIngredient = namedtuple('RecipeIngredient', 'policy_path n_episodes episode_length')
 RECIPE = [
-    RecipeIngredient("/home/ajc348/rds/hpc-work/d3rlpy/models/sac/HalfCheetah-v2/2022.05.10-18:13:40/SAC_online_20220510181343/model_25000.pt", 26,  1000),
-    RecipeIngredient("/home/ajc348/rds/hpc-work/d3rlpy/models/sac/HalfCheetah-v2/2022.05.10-18:13:40/SAC_online_20220510181343/model_50000.pt", 25,  1000),
-    RecipeIngredient("/home/ajc348/rds/hpc-work/d3rlpy/models/sac/HalfCheetah-v2/2022.05.10-18:13:40/SAC_online_20220510181343/model_75000.pt", 25,  1000),
-    RecipeIngredient("/home/ajc348/rds/hpc-work/d3rlpy/models/sac/HalfCheetah-v2/2022.05.10-18:13:40/SAC_online_20220510181343/model_100000.pt", 25, 1000),
+    RecipeIngredient(f"/home/ajc348/rds/hpc-work/dogo_results/d3rlpy/models/sac/HalfCheetah-v2/{SAC_POLICY_TIMESTAMP}/SAC_online_20220510181344/model_20000.pt", 0,  1000),
+    RecipeIngredient(f"/home/ajc348/rds/hpc-work/dogo_results/d3rlpy/models/sac/HalfCheetah-v2/{SAC_POLICY_TIMESTAMP}/SAC_online_20220510181344/model_40000.pt", 0,  1000),
+    RecipeIngredient(f"/home/ajc348/rds/hpc-work/dogo_results/d3rlpy/models/sac/HalfCheetah-v2/{SAC_POLICY_TIMESTAMP}/SAC_online_20220510181344/model_60000.pt", 0,  1000),
+    RecipeIngredient(f"/home/ajc348/rds/hpc-work/dogo_results/d3rlpy/models/sac/HalfCheetah-v2/{SAC_POLICY_TIMESTAMP}/SAC_online_20220510181344/model_80000.pt", 0, 1000),
+    RecipeIngredient(f"/home/ajc348/rds/hpc-work/dogo_results/d3rlpy/models/sac/HalfCheetah-v2/{SAC_POLICY_TIMESTAMP}/SAC_online_20220510181344/model_100000.pt", 100, 1000),
 ]
 
 ###############
@@ -43,7 +44,7 @@ dataset_dir = os.path.join(
     'sac',
     ENV,
     f"sac_{SAC_POLICY_TIMESTAMP}",
-    'D3RLPY-PEP3'
+    'D3RLPY-MP3-P4_100000'
 )
 dataset_path = os.path.join(dataset_dir, f"data_{cur_timestamp}.h5")
 
