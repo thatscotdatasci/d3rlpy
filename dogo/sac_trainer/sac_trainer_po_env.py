@@ -11,26 +11,40 @@ from d3rlpy.algos import SAC
 
 from dogo.paths import MODELS_BASEDIR
 from dogo.utils.datetime import get_current_timestamp_str
+from dogo.environments.wrappers import HalfCheetahPO
 
 ##########
 # Settings
 ##########
 
 SEED = None 
+
 USE_GPU = torch.cuda.is_available()
 
 ENV = "HalfCheetah-v2"
+STATE_DIMS = 17
 
 EPOCH_LENGTH = 20000
 N_EPOCHS = 150
 
-def main(seed: int = SEED):
+
+def main(masked_indices_str: str, seed: int = SEED):
+    # ####################################
+    # # Decide on the indices to be masked
+    # ####################################
+    # state_space_idxs = list(range(STATE_DIMS))
+    # np.random.shuffle(state_space_idxs)
+    # masked_indices = state_space_idxs[:num_masked_indices]
+    # masked_indices_str = ','.join([str(i) for i in masked_indices])
+
+    masked_indices = [int(i) for i in masked_indices_str.split(',')]
+
     ###############
     # Derived Paths
     ###############
 
     # Path that the results will be saved to
-    sac_policy_dir_gen = lambda ts: os.path.join(MODELS_BASEDIR, 'sac', ENV, ts)
+    sac_policy_dir_gen = lambda ts: os.path.join(MODELS_BASEDIR, 'sac', f'{ENV}-PO', ts)
     cur_timestamp = get_current_timestamp_str()
     sac_policy_dir = sac_policy_dir_gen(cur_timestamp)
 
@@ -46,6 +60,10 @@ def main(seed: int = SEED):
         f"model_{cur_timestamp}.pt"
     )
 
+    # Record the noise std being used
+    with open(os.path.join(sac_policy_dir, 'masked_indices.txt'), 'w') as f:
+        f.write(masked_indices_str)
+
     # Record the seed being used
     with open(os.path.join(sac_policy_dir, 'seed.txt'), 'w') as f:
         f.write(str(seed))
@@ -54,7 +72,7 @@ def main(seed: int = SEED):
     # Load the Environment
     ######################
 
-    env = gym.make(ENV)
+    env = HalfCheetahPO(gym.make(ENV), masked_indices=masked_indices)
     eval_env = gym.make(ENV)
 
     ######################
@@ -96,7 +114,7 @@ def main(seed: int = SEED):
         n_steps_per_epoch=EPOCH_LENGTH,
         update_interval=1,
         update_start_step=10000,
-        experiment_name=f"SAC_{seed}",
+        experiment_name=f"SAC_{seed}_{masked_indices_str}",
         logdir=sac_policy_dir,
     )
 
@@ -105,11 +123,14 @@ def main(seed: int = SEED):
     ################
     sac.save_model(sac_policy_model_path)
 
+
 if __name__ == '__main__':
     # Extract from command line arguments
     seed = int(sys.argv[1])
+    masked_indices_str = sys.argv[2]
 
     # For use when debugging
     # seed = 1443
+    # masked_indices_str = '1,2'
 
-    main(seed=seed)
+    main(seed=seed, masked_indices_str=masked_indices_str)
