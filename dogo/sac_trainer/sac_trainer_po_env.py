@@ -60,7 +60,7 @@ def main(masked_indices_str: str, seed: int = SEED):
         f"model_{cur_timestamp}.pt"
     )
 
-    # Record the noise std being used
+    # Record the maked indices being used
     with open(os.path.join(sac_policy_dir, 'masked_indices.txt'), 'w') as f:
         f.write(masked_indices_str)
 

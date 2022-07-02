@@ -6,6 +6,7 @@ import gym
 import d3rlpy
 from d3rlpy.algos import SAC
 
+from dogo.environments.wrappers import HalfCheetahPO
 from dogo.paths import (
     DATASET_BASEDIR
 )
@@ -15,7 +16,7 @@ from dogo.paths import (
 ##########
 
 SEED = 42 
-N_EPISODES = 1000
+N_EPISODES = 125
 EPISODE_LENGTH = 1000
 
 def main(dataset_name, env_name, sac_policy_model_path, policy_identifier):
@@ -37,12 +38,20 @@ def main(dataset_name, env_name, sac_policy_model_path, policy_identifier):
     with open(os.path.join(dataset_dir, f'sac_policy_model_path_P{policy_identifier}.txt'), 'w') as f:
         f.write(sac_policy_model_path)
 
+    with open(os.path.join(os.path.dirname(os.path.dirname(sac_policy_model_path)), 'masked_indices.txt'), 'r') as f:
+        masked_indices_str = f.readline()
+    masked_indices = [int(i) for i in masked_indices_str.split(',')]
+
+    # Record the maked indices being used - will be useful to ensure they match what was expceted
+    with open(os.path.join(dataset_dir, f'masked_indices_P{policy_identifier}.txt'), 'w') as f:
+        f.write(masked_indices_str)
+
     ##############################
     # Generate and Save Trajectory
     ##############################
 
     # Load environment
-    env = gym.make(env_name)
+    env = HalfCheetahPO(gym.make(env_name), masked_indices=masked_indices)
 
     if SEED:
         d3rlpy.seed(SEED)
@@ -104,8 +113,16 @@ def main(dataset_name, env_name, sac_policy_model_path, policy_identifier):
     np.save(os.path.join(dataset_dir, f'{dataset_name}-P{int(policy_identifier)}_{final_dataset_arr[0].shape[0]}.npy'), final_dataset_arr[0])
 
 if __name__ == '__main__':
+    # Load from command line arguments
     dataset_name = sys.argv[1]
     policy_identifier = float(sys.argv[2])
     env_name = sys.argv[3]
     sac_policy_model_path = sys.argv[4]
+
+    # Used in debugging
+    # dataset_name = 'ALAN_TEST'
+    # policy_identifier = 0
+    # env_name = 'HalfCheetah-v2'
+    # sac_policy_model_path = '/home/ajc348/rds/hpc-work/dogo_results/d3rlpy/models/sac/HalfCheetah-v2-PO/2022.06.28-20:29:27/SAC_1443_9,10_20220628202929/model_100000.pt'
+
     main(dataset_name=dataset_name, env_name=env_name, sac_policy_model_path=sac_policy_model_path, policy_identifier=policy_identifier)

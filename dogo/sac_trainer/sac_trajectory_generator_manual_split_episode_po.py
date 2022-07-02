@@ -6,6 +6,7 @@ import gym
 import d3rlpy
 from d3rlpy.algos import SAC
 
+from dogo.environments.wrappers import HalfCheetahPO
 from dogo.paths import (
     DATASET_BASEDIR
 )
@@ -39,12 +40,20 @@ def main(dataset_name, env_name, sac_policy_model_path):
     with open(os.path.join(dataset_dir, 'sac_policy_model_path.txt'), 'w') as f:
         f.write(sac_policy_model_path)
 
+    with open(os.path.join(os.path.dirname(os.path.dirname(sac_policy_model_path)), 'masked_indices.txt'), 'r') as f:
+        masked_indices_str = f.readline()
+    masked_indices = [int(i) for i in masked_indices_str.split(',')]
+
+    # Record the maked indices being used - will be useful to ensure they match what was expceted
+    with open(os.path.join(dataset_dir, f'masked_indices.txt'), 'w') as f:
+        f.write(masked_indices_str)
+
     ##############################
     # Generate and Save Trajectory
     ##############################
 
     # Load environment
-    env = gym.make(env_name)
+    env = HalfCheetahPO(gym.make(env_name), masked_indices=masked_indices)
 
     if SEED:
         d3rlpy.seed(SEED)
