@@ -20,3 +20,18 @@ build
 dist
 /.idea/
 *.egg-info
+
+# VSCode
+.vscode
+
+# Virtual env
+.venv
+
+# HPC
+slurm_logs/
+slurm-*
+machine.file.*
+
+# Models and Datasets
+models/
+datasets/

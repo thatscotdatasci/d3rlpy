@@ -1,0 +1,5 @@
+# source this file to activate the d3rlpy environment
+
+# run these steps to create environment
+source .venv/bin/activate
+export LD_LIBRARY_PATH=/home/ajc348/.mujoco/mujoco210/bin:$LD_LIBRARY_PATH
