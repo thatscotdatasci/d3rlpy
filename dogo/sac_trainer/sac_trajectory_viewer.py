@@ -1,8 +1,11 @@
-import os
-
 import numpy as np
 import gym
-from mujoco_py import MjSimState
+
+
+######################################################
+# View a pre-saved dataset of transitions/trajectories
+######################################################
+
 
 ########
 # Config
