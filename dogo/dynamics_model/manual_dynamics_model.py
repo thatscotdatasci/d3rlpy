@@ -8,6 +8,11 @@ from torch.distributions import MultivariateNormal
 
 from dogo.utils.pytorch_setup import DEVICE
 
+#######################################################################################
+# Custom dynamics model - based on MBPO, but with fewer layers
+# The purpose of this was simply to ensure that custom models could be used with D3RLPY
+#######################################################################################
+
 class Gauss_Dynamics_Model(nn.Module):
     def __init__(
         self,

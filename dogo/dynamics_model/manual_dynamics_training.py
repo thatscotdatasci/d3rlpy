@@ -52,5 +52,5 @@ dynamics_model_path = os.path.join(MODELS_BASEDIR, DYNAMICS_MODEL_DIR, 'manual',
 if not os.path.isdir(dynamics_model_path):
     os.makedirs(dynamics_model_path)
 
-# save the dynamics mode
+# save the dynamics model
 torch.save(trainer.model.state_dict(), os.path.join(dynamics_model_path, "model.pt"))
