@@ -29,8 +29,14 @@ for idx in range(1000):
     # Use the action to take a step
     # env.step(actions[idx,:])
 
-    # # Setting the state
+    # Setting the state
     qpos = np.hstack((np.zeros(1),states[idx,:8]))
+    
+    # Use the below to fix the values of certain features
+    # This can be used to verify that rendering is working as expected
+    # qpos[1] = -2
+    # qpos[2] = 5*np.pi
+    
     qvel = states[idx,8:]
     env.set_state(qpos=qpos, qvel=qvel)
 
