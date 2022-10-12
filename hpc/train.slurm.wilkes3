@@ -5,7 +5,7 @@
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
 ##SBATCH --exclusive
-#SBATCH --time=01:00:00
+#SBATCH --time=12:00:00
 #SBATCH --mail-type=FAIL
 #! Uncomment this to prevent the job from being requeued (e.g. if
 #! interrupted by node failure or system downtime):
@@ -33,7 +33,7 @@ source /home/ajc348/rds/hpc-work/d3rlpy/hpc/README.d3rlpy.activate
 application="python"
 
 #! Run options for the application:
-options="dogo/dynamics_model/d3rlpy_dynamics_trainer.py"
+options="dogo/sac_trainer/sac_trainer_noisy_env.py"
 
 #! Work directory (i.e. where the job will run):
 workdir="$SLURM_SUBMIT_DIR"  # The value of SLURM_SUBMIT_DIR sets workdir to the directory
