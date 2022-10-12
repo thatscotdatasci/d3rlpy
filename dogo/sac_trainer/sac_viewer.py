@@ -12,17 +12,16 @@ from dogo.paths import MODELS_BASEDIR
 
 SEED = None 
 
-ENV = "HalfCheetah-v2"
-
 #*********
 # Baslines
 #*********
 
+ENV = "HalfCheetah-v2"
 ENV_FOLDER = ENV
 
-SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
-SAC_POLICY_d3rlpy_DIR = "SAC_online_20220510181343"
-SAC_POLICY_CHECKPOINT = "100000"
+# SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:40"
+# SAC_POLICY_d3rlpy_DIR = "SAC_online_20220510181343"
+# SAC_POLICY_CHECKPOINT = "100000"
 
 # SAC_POLICY_TIMESTAMP = "2022.05.10-18:13:41"
 # SAC_POLICY_d3rlpy_DIR = "SAC_online_20220510181345"
@@ -36,6 +35,7 @@ SAC_POLICY_CHECKPOINT = "100000"
 # Noisy Envs
 #***********
 
+# ENV = "HalfCheetah-v2"
 # ENV_FOLDER = "HalfCheetah-v2-Noise"
 
 # 1443 - 0.1
@@ -57,6 +57,7 @@ SAC_POLICY_CHECKPOINT = "100000"
 # PO Envs
 #********
 
+# ENV = "HalfCheetah-v2"
 # ENV_FOLDER = "HalfCheetah-v2-PO"
 
 # 1443 - 3
@@ -78,6 +79,45 @@ SAC_POLICY_CHECKPOINT = "100000"
 # SAC_POLICY_TIMESTAMP = "2022.06.28-20:29:10"
 # SAC_POLICY_d3rlpy_DIR = "SAC_1443_3,16_20220628202911"
 # SAC_POLICY_CHECKPOINT = "100000"
+
+#*******
+# Hopper
+#*******
+
+ENV = "Hopper-v2"
+ENV_FOLDER = ENV
+
+SAC_POLICY_TIMESTAMP = "2022.08.31-14:32:54"
+SAC_POLICY_d3rlpy_DIR = "SAC_1234_20220831143300"
+SAC_POLICY_CHECKPOINT = "200000"
+
+# SAC_POLICY_TIMESTAMP = "2022.08.31-14:32:55"
+# SAC_POLICY_d3rlpy_DIR = "SAC_1443_20220831143300"
+# SAC_POLICY_CHECKPOINT = "1000000"
+
+# SAC_POLICY_TIMESTAMP = "2022.08.31-14:34:23"
+# SAC_POLICY_d3rlpy_DIR = "SAC_4321_20220831143424"
+# SAC_POLICY_CHECKPOINT = "1000000"
+
+#*********
+# Walker2d
+#*********
+
+# ENV = "Walker2d-v2"
+# ENV_FOLDER = ENV
+
+# SAC_POLICY_TIMESTAMP = "2022.08.31-15:46:49"
+# SAC_POLICY_d3rlpy_DIR = "SAC_1443_20220831154653"
+# SAC_POLICY_CHECKPOINT = "100000"
+
+# SAC_POLICY_TIMESTAMP = "2022.08.31-15:47:43"
+# SAC_POLICY_d3rlpy_DIR = "SAC_4321_20220831154743"
+# SAC_POLICY_CHECKPOINT = "3000000"
+
+# SAC_POLICY_TIMESTAMP = "2022.08.31-15:50:29"
+# SAC_POLICY_d3rlpy_DIR = "SAC_1234_20220831155031"
+# SAC_POLICY_CHECKPOINT = "3000000"
+
 
 ###############
 # Derived Paths
@@ -115,10 +155,11 @@ for i_episode in range(1):
     observation = env.reset()
     for t in range(10000):
 
-        # Cannot render from HPC terminal
+        # Cannot render from standard HPC terminal
+        # Comment out if not running in a VNC session
         env.render()
 
-        print(observation)
+        # print(observation)
         
         # The sample_action methods requires a batch dimension
         # In this case we are only passing in a single observation
